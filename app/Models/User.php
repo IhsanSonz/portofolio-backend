@@ -20,6 +20,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -59,5 +60,10 @@ class User extends Authenticatable implements JWTSubject
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }

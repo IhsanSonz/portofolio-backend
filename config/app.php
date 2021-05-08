@@ -175,7 +175,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        // Jenssengers MongoDB
+        // laravel-mongodb
         Jenssegers\Mongodb\MongodbServiceProvider::class,
 
         // Tymon JWT Auth

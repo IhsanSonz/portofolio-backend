@@ -38,4 +38,9 @@ class Product extends Moloquent
     {
         return $this->hasMany(ProductTag::class);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

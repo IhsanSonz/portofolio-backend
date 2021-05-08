@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Moloquent;
 
-class ProductDet extends Moloquent
+class Rating extends Moloquent
 {
     use HasFactory;
 
-    protected $collection = 'product_dets';
+    protected $collection = 'ratings';
 
     protected $fillable = [
-        'size',
-        'color',
-        'stock',
-        'photos',
+        'rate',
+        'user_id',
         'product_id',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function products()
     {
