@@ -85,12 +85,13 @@ class TagController extends Controller
     public function destroy($id)
     {
         $tag = Tag::find($id);
+        $tag->product_tags()->delete();
         $tag->delete();
 
         return response()->json([
             'success' => true,
             'message' => 'get data success',
-            'data' => compact('tag'),
+            'data' => null,
         ]);
     }
 }

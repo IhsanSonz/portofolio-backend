@@ -14,17 +14,29 @@ class ProductDetController extends Controller
      */
     public function index()
     {
-        //
+        $product_dets = ProductDet::latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'get data success',
+            'data' => compact('product_dets'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function show($id)
     {
-        //
+        $product_det = ProductDet::find($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'get data success',
+            'data' => compact('product_det'),
+        ]);
     }
 
     /**
@@ -35,51 +47,56 @@ class ProductDetController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $product_det = new ProductDet;
+        $product_det->color = $request->color;
+        $product_det->size = $request->size;
+        $product_det->stock = $request->stock;
+        $product_det->photos = $request->photos;
+        $product_det->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ProductDet  $productDet
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ProductDet $productDet)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ProductDet  $productDet
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ProductDet $productDet)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'post data success',
+            'data' => compact('product_det'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductDet  $productDet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductDet $productDet)
+    public function update(Request $request, $id)
     {
-        //
+        $product_det = ProductDet::find($id);
+        $product_det->color = $request->color;
+        $product_det->size = $request->size;
+        $product_det->stock = $request->stock;
+        $product_det->photos = $request->photos;
+        $product_det->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'put/patch data success',
+            'data' => compact('product_det'),
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductDet  $productDet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductDet $productDet)
+    public function destroy($id)
     {
-        //
+        $product_det = ProductDet::find($id);
+        $product_det->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'delete data success',
+            'data' => compact('product_det'),
+        ]);
     }
 }

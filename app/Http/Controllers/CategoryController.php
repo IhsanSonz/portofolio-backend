@@ -14,17 +14,29 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'get data success',
+            'data' => compact('categories'),
+        ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display the specified resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function show($id)
     {
-        //
+        $category = Category::find($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'get data success',
+            'data' => compact('category'),
+        ]);
     }
 
     /**
@@ -35,51 +47,50 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $category = new Category;
+        $category->name = $request->name;
+        $category->save();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'post data success',
+            'data' => compact('category'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'put/patch data success',
+            'data' => compact('category'),
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'delete data success',
+            'data' => null,
+        ]);
     }
 }
