@@ -49,6 +49,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $product = new Product;
         $product->name = $request->name;
         $product->desc = $request->desc;
@@ -60,12 +61,14 @@ class ProductController extends Controller
         $tags = $request->tags;
         foreach ($tags as $tag) {
             $tag_id = '';
-            if (!$tag = Tag::where('name', $tag)->first()) {
+            if (!$data = Tag::where('name', $tag)->first()) {
                 $newTag = new Tag;
                 $newTag->name = $tag;
                 $newTag->save();
 
                 $tag_id = $newTag->_id;
+            } else {
+                $tag_id = $data->_id;
             }
 
             $pivot = new ProductTag;
@@ -100,6 +103,41 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->save();
 
+        $updatedTags = [];
+
+        foreach ($product->product_tags as $pivot) {
+            $temp = Tag::find($pivot->tag_id);
+            $pivot->name = $temp->name;
+            array_push($updatedTags, $temp->name);
+
+            if (!in_array($pivot->name, $request->tags)) {
+                ProductTag::find($pivot->_id)->delete();
+            }
+        }
+
+        foreach ($request->tags as $tag) {
+            if (!in_array($tag, $updatedTags)) {
+                $tag_id = '';
+                if (!$data = Tag::where('name', $tag)->first()) {
+                    $newTag = new Tag;
+                    $newTag->name = $tag;
+                    $newTag->save();
+
+                    $tag_id = $newTag->_id;
+                } else {
+                    $tag_id = $data->_id;
+                }
+
+                $pivot = new ProductTag;
+                $pivot->tag_id = $tag_id;
+                $pivot->product_id = $product->_id;
+                $pivot->save();
+            }
+        }
+
+        $product->refresh();
+        $product->product_tags;
+
         return response()->json([
             'success' => true,
             'message' => 'put/patch data success',
@@ -122,7 +160,7 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'delete data success',
-            'data' => compact('product'),
+            'data' => null,
         ]);
     }
 }
