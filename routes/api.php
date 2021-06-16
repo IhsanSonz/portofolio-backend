@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 //database truncate
-Route::get('delete', [UserController::class, 'index']);
+Route::get('delete', [UserController::class, 'truncate']);
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);

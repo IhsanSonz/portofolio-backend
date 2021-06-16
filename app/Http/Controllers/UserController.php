@@ -12,7 +12,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index()
+    public function truncate()
     {
         User::truncate();
         Category::truncate();
