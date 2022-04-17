@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductDet;
+use File;
 use Illuminate\Http\Request;
 
 class ProductDetController extends Controller
@@ -51,7 +52,17 @@ class ProductDetController extends Controller
         $product_det->color = $request->color;
         $product_det->size = $request->size;
         $product_det->stock = $request->stock;
-        $product_det->photos = $request->photos;
+        $photos = [];
+
+        foreach ($request->photos as $file) {
+            $file_name = date('YmdHis') . "_" . $file->getClientOriginalName();
+            $file_dir = 'storage/uploads/images';
+            $file->move($file_dir, $file_name);
+
+            array_push($photos, $file_name);
+        }
+
+        $product_det->photos = $photos;
         $product_det->save();
 
         return response()->json([
@@ -73,7 +84,22 @@ class ProductDetController extends Controller
         $product_det->color = $request->color;
         $product_det->size = $request->size;
         $product_det->stock = $request->stock;
-        $product_det->photos = $request->photos;
+
+        $photos = [];
+        $file_dir = 'storage/uploads/images';
+
+        foreach ($product_det->photos as $photo) {
+            File::delete('storage/uploads/images/' . $photo);
+        }
+
+        foreach ($request->photos as $file) {
+            $file_name = date('YmdHis') . "_" . $file->getClientOriginalName();
+            $file->move($file_dir, $file_name);
+
+            array_push($photos, $file_name);
+        }
+
+        $product_det->photos = $photos;
         $product_det->save();
 
         return response()->json([
@@ -90,13 +116,25 @@ class ProductDetController extends Controller
      */
     public function destroy($id)
     {
+        $file_dir = 'storage/uploads/images/';
+
         $product_det = ProductDet::find($id);
+        if (isset($product_det->photos) && !is_null($product_det->photos)) {
+            if (is_array($product_det->photos)) {
+                foreach ($product_det->photos as $photo) {
+                    File::delete($file_dir . $photo);
+                }
+            } else {
+                File::delete($file_dir . $product_det->photos);
+            }
+        };
+
         $product_det->delete();
 
         return response()->json([
             'success' => true,
             'message' => 'delete data success',
-            'data' => compact('product_det'),
+            'data' => null,
         ]);
     }
 }

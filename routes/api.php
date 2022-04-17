@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDetController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -46,5 +47,11 @@ Route::middleware(['middleware' => 'jwt.verify'])->group(function () {
     Route::post('tag', [TagController::class, 'store']);
     Route::put('tag/{id}', [TagController::class, 'update']);
     Route::delete('tag/{id}', [TagController::class, 'destroy']);
+
+    Route::get('product_det', [ProductDetController::class, 'index']);
+    Route::get('product_det/{id}', [ProductDetController::class, 'show']);
+    Route::post('product_det', [ProductDetController::class, 'store']);
+    Route::put('product_det/{id}', [ProductDetController::class, 'update']);
+    Route::delete('product_det/{id}', [ProductDetController::class, 'destroy']);
 
 });
